@@ -8,7 +8,7 @@ application = Application.builder().token(os.getenv("7911027827:AAFmPaq8pUdQSjKO
 # Function to handle the /start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     # Define the URL of your web app
-    web_app_url = "rtu-dep-bot-git-main-vlads-projects-7e339f13.vercel.app"  # Replace with your actual URL
+    web_app_url = "https://rtu-dep-bot-git-main-vlads-projects-7e339f13.vercel.app"  # Replace with your actual URL
 
     # Create a button that links to your web app
     keyboard = [[InlineKeyboardButton("Open Web App", url=web_app_url)]]
