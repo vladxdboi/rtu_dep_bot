@@ -8,7 +8,7 @@
     ],
     "routes": [
         {
-            "src": "/webhook", 
+            "src": "/webhook",
             "methods": ["POST"],
             "dest": "bot/bot.py"
         }
