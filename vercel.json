@@ -1,14 +1,7 @@
 {
   "functions": {
-    "api/bot.py": {
-      "runtime": "python3.9",
-      "memory": 1024,
-      "maxDuration": 30
-    },
-    "web/app.py": {
+    "api/**/*.py": {
       "runtime": "python3.9"
     }
-  },
-  "buildCommand": "python -m pip install -r requirements.txt",
-  "outputDirectory": "dist"
+  }
 }
