@@ -25,7 +25,7 @@ async def webhook(request: Request):
     return {"status": "ok"}
 
 def send_message(chat_id, text):
-    url = f"https://api.telegram.org/bot{7911027827:AAFmPaq8pUdQSjKOASuMAgrTd9001raAtJ4}/sendMessage"
+    url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
         "chat_id": chat_id,
         "text": text,
