@@ -1,11 +1,15 @@
 from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 import requests
+import logging
 
 app = FastAPI()
 
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
 # Telegram Bot Token and API URL
-TELEGRAM_BOT_TOKEN = "7911027827:AAFmPaq8pUdQSjKOASuMAgrTd9001raAtJ4"
+TELEGRAM_BOT_TOKEN = "7911027827:AAFmPaq8pUdQSjKOASuMAgrTd9001raAtJ4"  # Use an environment variable in production
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
 
 # Home route that displays a simple HTML form for file upload
@@ -33,15 +37,21 @@ async def create_upload_file(file: UploadFile = File(...)):
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
     update = await request.json()
-    
-    chat_id = update['message']['chat']['id']
-    text = update['message']['text']
+    logging.info(f"Received update: {update}")  # Log incoming updates
 
-    if text == "/start":
-        # Send a welcome message with a link to the web app
-        web_app_url = "https://rtu-dep-bot-git-main-vlads-projects-7e339f13.vercel.app"  # Replace with your web app URL
-        message = f"Welcome! Click here to access the web app: {web_app_url}"
-        requests.post(TELEGRAM_API_URL, json={"chat_id": chat_id, "text": message})
+    # Check if the necessary keys exist in the update
+    if 'message' in update and 'chat' in update['message'] and 'text' in update['message']:
+        chat_id = update['message']['chat']['id']
+        text = update['message']['text']
+
+        if text == "/start":
+            # Send a welcome message with a link to the web app
+            web_app_url = "https://rtu-dep-bot-git-main-vlads-projects-7e339f13.vercel.app"
+            message = f"Welcome! Click here to access the web app: {web_app_url}"
+            response = requests.post(TELEGRAM_API_URL, json={"chat_id": chat_id, "text": message})
+
+            # Log response status from Telegram API
+            if response.status_code != 200:
+                logging.error(f"Failed to send message: {response.text}")
 
     return {"status": "ok"}
-
