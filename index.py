@@ -4,20 +4,23 @@ import os
 
 app = FastAPI()
 
-# Replace this with your actual bot token
 TOKEN = os.getenv("7911027827:AAFmPaq8pUdQSjKOASuMAgrTd9001raAtJ4")
 
 @app.post("/webhook")
 async def webhook(request: Request):
     update = await request.json()
     
-    # Check if the update contains a message with the /start command
+    # Log the incoming update for debugging
+    print(update)  # This will print the update to Vercel logs
+    
     if 'message' in update and 'text' in update['message']:
         chat_id = update['message']['chat']['id']
         text = update['message']['text']
 
         if text == '/start':
             send_message(chat_id, "Welcome! How can I assist you today?")
+        else:
+            send_message(chat_id, "You typed: " + text)  # Echo any other message
 
     return {"status": "ok"}
 
@@ -28,4 +31,8 @@ def send_message(chat_id, text):
         "text": text,
         "parse_mode": "HTML"  # Optional: Use HTML formatting
     }
-    requests.post(url, json=payload)
+    response = requests.post(url, json=payload)
+    
+    # Log the response for debugging
+    print(response.json())  # Check if the message was sent successfully
+
