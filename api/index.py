@@ -46,7 +46,7 @@ async def telegram_webhook(request: Request):
 
         if text == "/start":
             # Send a welcome message with a link to the web app
-            web_app_url = "https://rtu-dep-bot-git-main-vlads-projects-7e339f13.vercel.app"
+            web_app_url = "https://t.me/rtu_dep_bot/Bobing"
             message = f"Welcome! Click here to access the web app: {web_app_url}"
             response = requests.post(TELEGRAM_API_URL, json={"chat_id": chat_id, "text": message})
 
