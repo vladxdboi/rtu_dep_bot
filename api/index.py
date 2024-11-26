@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 import requests
 import logging
+from pathlib import Path
 
 app = FastAPI()
 
@@ -12,43 +13,18 @@ logging.basicConfig(level=logging.INFO)
 TELEGRAM_BOT_TOKEN = "7911027827:AAFmPaq8pUdQSjKOASuMAgrTd9001raAtJ4"  # Use an environment variable in production
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
 
-# Home route that displays a greeting landing page
+# Path to the external HTML file
+HTML_FILE_PATH = Path("static/index.html")  # Adjust this path to match your project's structure
+
+# Home route that displays the landing page
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
-    return """
-    <html>
-        <head>
-            <title>Welcome to My Web App</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    text-align: center;
-                    padding: 50px;
-                }
-                h1 {
-                    color: #4CAF50;
-                }
-                button {
-                    padding: 10px 20px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    background-color: #4CAF50;
-                    color: white;
-                    border: none;
-                    border-radius: 5px;
-                }
-                button:hover {
-                    background-color: #45a049;
-                }
-            </style>
-        </head>
-        <body>
-            <h1>Welcome to My Web App!</h1>
-            <p>Click the button below to get started:</p>
-            <button onclick="window.location.href='https://t.me/rtu_dep_bot/Bobing'">Go to Web App</button>
-        </body>
-    </html>
-    """
+    try:
+        # Read the content of the HTML file
+        html_content = HTML_FILE_PATH.read_text(encoding="utf-8")
+        return HTMLResponse(content=html_content)
+    except FileNotFoundError:
+        return HTMLResponse(content="<h1>Error: HTML file not found</h1>", status_code=404)
 
 # Webhook route for Telegram bot
 @app.post("/webhook")
